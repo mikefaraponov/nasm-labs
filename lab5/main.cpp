@@ -96,6 +96,10 @@ void Task3PutBreakPointOnWmClose() {
  */
 void Task3HandleBreakPointOnWmClose() {
     char key[4] = "", message[100] = "";
+    CONTEXT ctx;
+    GetThreadContext(pi.hThread, &ctx);
+    --ctx.Eip;
+    SetThreadContext(pi.hThread, &ctx);
     ReadProcessMemory(pi.hProcess, KEY_ADDR, key, KEY_LENGTH, NULL);
     sprintf(message, "WM_CLOSE handled and the key is %s", key);
     WriteProcessMemory(pi.hProcess, WM_CLOSE_BREAKPOINT, &BYTE_STORAGE, INT3_CODE_SIZE, NULL);
